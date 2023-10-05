@@ -1,8 +1,44 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
 
-//Estructura
+// Estructura Proyecto
+type Tarea struct {
+	nombre     string
+	desc       string
+	completado bool
+}
+
+type Listatareas struct {
+	tareas []Tarea //Lista de Tareas
+}
+
+///Metodo para agregar Tarea Proyecto
+
+func (l *Listatareas) agregarTarea(t Tarea) {
+	l.tareas = append(l.tareas, t)
+}
+
+// /Metodo para marcar Tarea Proyecto
+func (l *Listatareas) marcarTarea(index int) {
+	l.tareas[index].completado = true
+}
+
+// /Metodo para Editar Tarea Proyecto
+func (l *Listatareas) editarTarea(index int, t Tarea) {
+	l.tareas[index] = t
+}
+
+// /Metodo para eliminar Tarea Proyecto
+func (l *Listatareas) eliminarTarea(index int) {
+	l.tareas = append(l.tareas[:index], l.tareas[index+1:]...)
+}
+
+// Estructura
 type Persona struct {
 	nombre string
 	edad   int
@@ -116,6 +152,68 @@ func main() {
 	//metodo
 	pliss := Persona{"Lis Mesa ", 27, "SuCorreo"}
 	pliss.diHola()
+
+	///Proyecto de Sesion
+	//Instancia
+	lista := Listatareas{}
+	leer := bufio.NewReader(os.Stdin)
+	for {
+		var opcion int
+		fmt.Println("Selecione una opcion\n",
+			"1. Agregar tarea\n",
+			"2. Marcar tarea como Completada\n",
+			"3. Editar Tarea\n",
+			"4. Elimnar tarea\n",
+			"5. Salir")
+		fmt.Print("Ingrese la Opcion:")
+		fmt.Scanln(&opcion)
+		switch opcion {
+		case 1:
+			var t Tarea
+			fmt.Println("Ingrese el nombre de la tarea")
+			t.nombre, _ = leer.ReadString('\n')
+			fmt.Println("Ingrese Descripcion de la tarea")
+			t.desc, _ = leer.ReadString('\n')
+			lista.agregarTarea(t)
+			fmt.Println("Tarea Agregada Correctamente")
+		case 2:
+			var index int
+			fmt.Println("Ingrese el inice de la tarea que desea marcar como completada:")
+			fmt.Scanln(&index)
+			lista.marcarTarea(index)
+			fmt.Println("Tarea Marcada como Completada Correctamente")
+		case 3:
+			var index int
+			var t Tarea
+			fmt.Println("Ingrese el inice de la tarea que desea actulizar :")
+			fmt.Scanln(&index)
+			fmt.Println("Ingrese el nombre de la tarea")
+			t.nombre, _ = leer.ReadString('\n')
+			fmt.Println("Ingrese Descripcion de la tarea")
+			t.desc, _ = leer.ReadString('\n')
+			lista.editarTarea(index, t)
+			fmt.Println("Tarea Actulizada Correctamente")
+		case 4:
+			var index int
+			fmt.Println("Ingrese el inice de la tarea que desea Eliminar :")
+			fmt.Scanln(&index)
+			lista.eliminarTarea(index)
+			fmt.Println("Tarea Eliminada Correctamente")
+		case 5:
+			fmt.Println("Saliendo Tareas")
+			return
+		case 6:
+			fmt.Println("Opcion Invalida")
+
+		}
+		/// Listar todas las tareas
+		fmt.Println("Lista de tareas:")
+		fmt.Println("===============================================")
+		for i, t := range lista.tareas {
+			fmt.Printf("%d. %s-%s-Completado: %t\n", i, t.nombre, t.desc, t.completado)
+		}
+		fmt.Println("===============================================")
+	}
 
 }
 
