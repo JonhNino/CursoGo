@@ -125,4 +125,5 @@ func main() {
 	fmt.Printf("\nÁrea: %.*f\n", precision, area)
 	fmt.Printf("Perímetro: %.*f\n", precision, perimetro)
 
+	/// Operadores Booleanos
 }
